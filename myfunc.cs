@@ -26,6 +26,7 @@ namespace myfunction
 
 
             var str = Environment.GetEnvironmentVariable("sqldb_connection");
+            
             string rst = "";
             
             using (SqlConnection conn = new SqlConnection(str))
@@ -35,17 +36,27 @@ namespace myfunction
             
                 using (SqlCommand cmd = new SqlCommand(query,conn))
                 {
-                    var row = cmd.ExecuteReader();
-                    //if (row.HasRows)
-                    //{
-                        rst = row.GetString(0);
-                        log.LogInformation($"row {row}");
-                        log.LogInformation($"result {rst}");
-                    //}
+                    var reader = cmd.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            var row = reader.GetString(0);
+                            log.LogInformation($"row {row}");
+                            log.LogInformation($"result {rst}");
+                            return new OkObjectResult(row);
+                        }
+                        string responseMessage = "finished";
+                        return new OkObjectResult(responseMessage);
+                    }
+                    else
+                    {
+                        string responseMessage = "no results";
+                        return new OkObjectResult(responseMessage);
+                    }
                     //return new OkObjectResult(rst);
                 }
             }
-            return new OkObjectResult(rst);
         }
 
     }
