@@ -25,9 +25,9 @@ namespace myfunction
             skuid = skuid ?? data?.skuid;
 
 
-            //var str = Environment.GetEnvironmentVariable("sqldb_connection");
+            var str = Environment.GetEnvironmentVariable("sqldb_connection");
             string rst = "";
-            var str ="Server=tcp:funkydemoserver.database.windows.net,1433;Initial Catalog=funkdemodb;Persist Security Info=False;User ID=simont;Password=Bmw325Ci;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            
             using (SqlConnection conn = new SqlConnection(str))
             {
                 conn.Open();
