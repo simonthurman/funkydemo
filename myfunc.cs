@@ -26,13 +26,17 @@ namespace myfunction
 
 
             var str = Environment.GetEnvironmentVariable("sqldb_connection");
-            
             string rst = "";
             
             using (SqlConnection conn = new SqlConnection(str))
             {
                 conn.Open();
-                var query = @"select name from product where sku = 1";
+                if (String.IsNullOrEmpty(skuid))
+                {
+                    string responseMessage = "Enter Sku";
+                    return new OkObjectResult(responseMessage); 
+                }
+                var query = $"select name from product where sku = {skuid}";
             
                 using (SqlCommand cmd = new SqlCommand(query,conn))
                 {
@@ -54,7 +58,6 @@ namespace myfunction
                         string responseMessage = "no results";
                         return new OkObjectResult(responseMessage);
                     }
-                    //return new OkObjectResult(rst);
                 }
             }
         }
